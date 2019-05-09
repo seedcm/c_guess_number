@@ -1,67 +1,110 @@
-// 猜数字
-
-#include <stdlib.h>     // 包含srand函数
 #include <stdio.h>
-#include <time.h>       // 为随机数提供随机种子
-#define SIZE 11         // 十以内的数字,101为一百以内，1001为一千以内，10001为一万以内。
-#define COUNT 5         // 设置尝试次数
+#include <time.h>
+#include <stdlib.h>
 
-int main(int argc,char** argv)        // (待补充)程序开始前可设置数字范围大小
+/* 设置全局变量 */
+int guess;              // 答案
+int number_size;        // 需要猜测的数字大小的范围
+int count;              // 可以尝试的次数
+int arg_number_size;    // 参数设置数字大小的范围
+int arg_count;          // 参数设置可尝试的次数
+int set_number_size;    // 程序内设置数字大小的范围
+int set_count;          // 程序内设置可尝试的次数
+int tmp;                // 临时公用变量
+
+/* 函数声明 */
+int main_menu(void);    // 主菜单函数声明
+int set_menu(void);     // 设置菜单函数声明
+int game(void);         // 游戏函数声明
+
+/* 主函数 */
+int main(int argc, char** argv)
 {
-    int guess, answer, size, count, parameter;
+    int fun_main_menu;  // 主菜单--函数用变量声明
+    int fun_set_menu;   // 设置菜单函数--用变量声明
+    int fun_game;       // 游戏函数--变量声明
 
-    if (argc == 2)      // 判断带参数执行的参数个数是否为1
+    /* 设置默认变量值 */
+    number_size = 11;                   // 创建默认数字大小范围值
+    count = 5;                          // 创建默认尝试次数值
+    srand(time(NULL));                  // 为随机数提供随机种子
+    guess = rand() % number_size;       // 利用随机种子创建默认随机数
+
+    /* 检查是否带参数运行 */
+    if (argc != 1)
     {
-        if ((parameter = atoi(argv[1])) != 0)       // 判断参数是否为int型
+        /* 检查并设置参数变量值 */
+        if((arg_number_size = atoi(argv[1])) == 0 && (arg_count = atoi(argv[2]) == 0))
         {
-            size = parameter;       // 为int型则使用参数值
+            arg_number_size = atoi(argv[1]);
+            arg_count = atoi(argv[2]);
         }
         else
         {
-            size = SIZE;        // 否则使用定义值
+            if ((arg_number_size = atoi(argv[1])) == 0)
+            {
+                arg_number_size = atoi(argv[1]);
+            }
+            else
+            {
+                ;
+            }
         }
     }
     else
     {
-        size = SIZE;
-    }
-
-    // 获取随机数
-    srand(time(NULL));      // 创建随机数种子
-    guess = rand() % size;    // 创建一定范围内的随机数并赋值给整型变量guess
-    count = COUNT;
-
-    // 循环体开始
-    while (count != 0)
-    {
-        printf("你有%d次机会尝试猜出%d以内的正确数字：",count,size - 1);
-        if (scanf("%d",&answer) != 1)   // 判断输入的值类型是否正确
-        {
-            printf("值类型错误!请重试!\n");
-            scanf("%*[^\n]*c");     // **清除缓冲区数据，避免造成死循环**
-            continue;
-        }
-        else if (guess == answer)
-        {
-            printf("恭喜你猜对了!正确答案是%d!\n",guess);
-            break;
-        }
-        else
-        {
-            if (answer > guess)
-            {
-                printf("你猜的数字太大了!");
-            }
-            else
-            {
-                printf("你猜的数字太小了!");
-            }
-            printf("加油哦！");
-            continue;
-        }
+        /* 进入主菜单函数 */
+        fun_main_menu = main_menu();
     }
 
     return 0;
 }
 
+/* 主菜单函数 */
+int main_menu(void)
+{
+    int fun_set_menu;   // 设置菜单函数--用变量声明
+    int fun_game;       // 游戏函数--变量声明
+    int menu;           // 主菜单变量
+
+    /* 主菜单循环 */
+    while (1)
+    {
+        /* 菜单选项 */
+        printf("(1) 开始游戏\n(2) 游戏设置\n(0) 退出游戏\n");
+        printf("请选择对应的序号开始: ");
+        if ((scanf("%d",&menu)) == 1 || menu != 1 || menu != 2 || menu != 0)
+        {
+            continue;
+        }
+        else
+        {
+            if (menu == 1)
+            {
+                fun_game = game();
+                break;
+            }
+            else if (menu == 2)
+            {
+                fun_set_menu = set_menu();
+                break;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+    }
+}
+/* 设置菜单函数 */
+int set_menu(void)
+{
+    printf("I am a set_menu\n");
+}
+
+/* 游戏函数 */
+int game(void)
+{
+    printf("I am a game\n");
+}
 
