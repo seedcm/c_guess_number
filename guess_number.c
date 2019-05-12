@@ -2,109 +2,80 @@
 #include <time.h>
 #include <stdlib.h>
 
-/* 设置全局变量 */
-int guess;              // 答案
-int number_size;        // 需要猜测的数字大小的范围
-int count;              // 可以尝试的次数
-int arg_number_size;    // 参数设置数字大小的范围
-int arg_count;          // 参数设置可尝试的次数
-int set_number_size;    // 程序内设置数字大小的范围
-int set_count;          // 程序内设置可尝试的次数
-int tmp;                // 临时公用变量
+int game(void);
+int game_set(void);
 
-/* 函数声明 */
-int main_menu(void);    // 主菜单函数声明
-int set_menu(void);     // 设置菜单函数声明
-int game(void);         // 游戏函数声明
-
-/* 主函数 */
-int main(int argc, char** argv)
+int main(void)
 {
-    int fun_main_menu;  // 主菜单--函数用变量声明
-    int fun_set_menu;   // 设置菜单函数--用变量声明
-    int fun_game;       // 游戏函数--变量声明
-
-    /* 设置默认变量值 */
-    number_size = 11;                   // 创建默认数字大小范围值
-    count = 5;                          // 创建默认尝试次数值
-    srand(time(NULL));                  // 为随机数提供随机种子
-    guess = rand() % number_size;       // 利用随机种子创建默认随机数
-
-    /* 检查是否带参数运行 */
-    if (argc != 1)
+    while(1)
     {
-        /* 检查并设置参数变量值 */
-        if((arg_number_size = atoi(argv[1])) == 0 && (arg_count = atoi(argv[2]) == 0))
+        int ext;
+
+        if (ext == 0)
         {
-            arg_number_size = atoi(argv[1]);
-            arg_count = atoi(argv[2]);
+            break;
         }
-        else
-        {
-            if ((arg_number_size = atoi(argv[1])) == 0)
-            {
-                arg_number_size = atoi(argv[1]);
-            }
-            else
-            {
-                ;
-            }
-        }
-    }
-    else
-    {
-        /* 进入主菜单函数 */
-        fun_main_menu = main_menu();
-    }
-
-    return 0;
-}
-
-/* 主菜单函数 */
-int main_menu(void)
-{
-    int fun_set_menu;   // 设置菜单函数--用变量声明
-    int fun_game;       // 游戏函数--变量声明
-    int menu;           // 主菜单变量
-
-    /* 主菜单循环 */
-    while (1)
-    {
-        /* 菜单选项 */
-        printf("(1) 开始游戏\n(2) 游戏设置\n(0) 退出游戏\n");
-        printf("请选择对应的序号开始: ");
-        if ((scanf("%d",&menu)) == 1 || menu != 1 || menu != 2 || menu != 0)
+        else if (ext == 1)
         {
             continue;
         }
         else
         {
-            if (menu == 1)
+            printf("(1) 开始游戏\n(2) 游戏设置\n(0) 退出游戏\n");
+            scanf("%d",&menu_select);
+
+            if (menu_select == 1)
             {
-                fun_game = game();
-                break;
+                ext = game();
             }
-            else if (menu == 2)
+            else if (menu_select == 2)
             {
-                fun_set_menu = set_menu();
-                break;
+                ext = game_set();
+            }
+            else if (menu_select == 0)
+            {
+                exit(0);
+                return 0;
             }
             else
             {
-                return 0;
+                continue;
             }
+            break;
         }
     }
-}
-/* 设置菜单函数 */
-int set_menu(void)
-{
-    printf("I am a set_menu\n");
+    return 0;
 }
 
-/* 游戏函数 */
-int game(void)
+int game_set(void)
 {
-    printf("I am a game\n");
-}
+    int ext;
 
+    while(1)
+    {
+        if (ext == 1)
+        {
+            break;
+        }
+        else if (ext == 0)
+        {
+            return 1;
+        }
+        else
+        {
+            printf("(1) 设置猜测范围\n(2) 设置可尝试次数\n(0) 返回主菜单\n");
+            if (scanf("%d",&ext) != 1)
+            {
+                printf("无效输入!");
+                continue;
+            }
+            else
+            {
+                if (ext == 1)
+                {
+                    printf("请输入范围: ");
+                    scanf("%d",&size);
+
+
+                
+            
