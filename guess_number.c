@@ -36,11 +36,25 @@ int game(void)
     int p_count = count;
     while(1)
     {
+        if (p_count == 0)
+        {
+            printf("不好意思，你的次数用完了!退出游戏并返回主菜单!\n");
+            getchar();
+            menu();
+        }
         scanf("%*[^\n]%*c");
-        printf("你有%d次机会猜%d以内的数字!请开始你的表演: ",count,guess_number_size);
+        if (p_count != 1)
+        {
+            printf("你有%d次机会猜%d以内的数字!请开始你的表演: ",p_count,guess_number_size);
+        }
+        else 
+        {
+            printf("你还有最后一次机会咯，好好把握: ");
+        }
         if (scanf("%d",&answer) != 1)
         {
             printf("输入无效!\n");
+            scanf("%*[^\n]%*c");
             continue;
         }
         else
@@ -54,6 +68,7 @@ int game(void)
             {
                 printf("你的数字有点大!\n");
                 p_count--;
+                printf("p_count = %d\n",p_count);
                 continue;
             }
             else if (answer < guess_number)
@@ -62,14 +77,10 @@ int game(void)
                 p_count--;
                 continue;
             }
-            else if (p_count == 0)
-            {
-                printf("不好意思，你的次数用完了!\n");
-                menu();
-            }
             else
             {
                 printf("不对哦!\n");
+                scanf("%*[^\n]%*c");
                 p_count--;
                 continue;
             }
@@ -83,6 +94,7 @@ int game_set(void)
     int user_select;
     int user_count;
     int user_size;
+    int game_size;
     while(1)
     {
         scanf("%*[^\n]%*c");
@@ -90,6 +102,7 @@ int game_set(void)
         printf("请选择: ");
         if (scanf("%d",&user_select) != 1)
         {
+            scanf("%*[^\n]%*c");
             continue;
         }
         else
@@ -127,6 +140,7 @@ int game_set(void)
             else
             {
                 printf("输入不可识别!\n");
+                scanf("%*[^\n]%*c");
                 return 1;
             }
         }
@@ -146,6 +160,7 @@ int menu(void)
         if (scanf("%d",&user_select) != 1)
         {
             printf("无效输入!\n");
+            scanf("%*[^\n]%*c");
             continue;
         }
         else
@@ -166,6 +181,7 @@ int menu(void)
             else
             {
                 printf("选项不可识别!\n");
+                scanf("%*[^\n]%*c");
                 continue;
             }
         }
