@@ -2,200 +2,148 @@
 #include <stdlib.h>
 #include <time.h>
 
-int count;
-int guess_number;
-int guess_number_size;
-
-int init(int user_count, int user_guess_number)
+int init(int init_count, int init_question_size)
 {
+    int count;
+    int question;
+    int question_size;
+    
     srand(time(NULL));
-    guess_number_size = user_guess_number;
-    if (user_count == 0) 
+
+    if (init_count == 0)
     {
         count = 5;
     }
-    else 
+    else
     {
-        count = user_count;
+        count = init_count;
     }
-    if (user_guess_number == 0) 
+    if (init_question_size == 0)
     {
-        guess_number = rand() % 11;
+        question_size = 11;
     }
     else
     {
-        guess_number = rand() % user_guess_number;
+        question_size = init_question_size + 1;
     }
-    printf("初始化完成!\n");
-    return count,guess_number,guess_number_size;
-}
-
-int game(void)
-{
-    int answer;
-    int p_count = count;
-    while(1)
-    {
-        if (p_count == 0)
-        {
-            printf("不好意思，你的次数用完了!退出游戏并返回主菜单!\n");
-            getchar();
-            menu();
-        }
-        scanf("%*[^\n]%*c");
-        if (p_count != 1)
-        {
-            printf("你有%d次机会猜%d以内的数字!请开始你的表演: ",p_count,guess_number_size);
-        }
-        else 
-        {
-            printf("你还有最后一次机会咯，好好把握: ");
-        }
-        if (scanf("%d",&answer) != 1)
-        {
-            printf("输入无效!\n");
-            scanf("%*[^\n]%*c");
-            continue;
-        }
-        else
-        {
-            if (answer == guess_number)
-            {
-                printf("恭喜你!猜对了，正确答案是%d\n",guess_number);
-                break;
-            }
-            else if (answer > guess_number)
-            {
-                printf("你的数字有点大!\n");
-                p_count--;
-                printf("p_count = %d\n",p_count);
-                continue;
-            }
-            else if (answer < guess_number)
-            {
-                printf("你的数字有点小!\n");
-                p_count--;
-                continue;
-            }
-            else
-            {
-                printf("不对哦!\n");
-                scanf("%*[^\n]%*c");
-                p_count--;
-                continue;
-            }
-        }
-    }
-    return 0;
+    question = rand() % question_size;
+    
+    game(count,question,question_size);
 }
 
 int game_set(void)
 {
-    int user_select;
-    int user_count;
-    int user_size;
-    int game_size;
+    int set_count = 0;
+    int set_question_size = 0;
+
     while(1)
     {
-        scanf("%*[^\n]%*c");
-        printf("(1)更改数字大小\n(2)更改尝试次数\n(0)确认并返回\n");
-        printf("请选择: ");
-        if (scanf("%d",&user_select) != 1)
+        printf("请设置尝试次数: ");
+        if (scanf("%d",&set_count) == 1)
+        {
+            printf("次数设置成功!\n");
+        }
+        else
         {
             scanf("%*[^\n]%*c");
+            printf("无效输入!\n");
+            continue;
+        }
+        printf("请设置数字范围: ");
+        if (scanf("%d",&set_question_size) == 1)
+        {
+            printf("范围设置成功!\n");
+        }
+        else
+        {
+            scanf("%*[^\n]%*c");
+            printf("无效输入!\n");
+            continue;
+        }
+        printf("游戏设置已更新,回车进入游戏!\n");
+        getchar();
+        break;
+    }
+
+    init(set_count,set_question_size);
+}
+
+int game(int game_count, int game_question, int game_question_size)
+{
+    int answer;
+    int count;
+    count = game_count;
+
+    while (count != 0)
+    {
+        scanf("%*[^\n]%*c");
+        if (count != 1)
+        {
+            printf("你有%d次机会猜测%d以内的数字,请开始你的表演: ",count,game_question_size - 1);
+        }
+        else
+        {
+            printf("你还有最后一次机会咯,想清楚哦: ");
+        }
+        if (scanf("%d",&answer) != 1)
+        {
+            printf("无效输入!\n");
             continue;
         }
         else
         {
-            if (user_select == 1) 
+            if (answer < game_question)
             {
-                printf("请输入要改变的值: ");
-                if (scanf("%d",&user_size) != 1)
-                {
-                    printf("输入错误!\n");
-                    continue;
-                }
-                else
-                {
-                    printf("数字大小更改完成!\n");
-                }
+                printf("你给的数字小咯!\n");
+                count --;
+                continue;
             }
-            else if (user_select == 2)
+            else if (answer > game_question)
             {
-                printf("请输入更改的数值: ");
-                if (scanf("%d",&user_count) != 1)
-                {
-                    printf("输入错误 !\n");
-                    continue;
-                }
-                else
-                {
-                    printf("尝试数值更改完成!\n");
-                }
-            }
-            else if (user_select == 0)
-            {
-                menu();
+                printf("你给的数字大咯!\n");
+                count --;
+                continue;
             }
             else
             {
-                printf("输入不可识别!\n");
-                scanf("%*[^\n]%*c");
-                return 1;
+                printf("哎哟不错哦！你猜对了！正确答案%d\n",game_question);
+                break;
             }
         }
     }
-    init(user_count,user_size);
+    printf("游戏结束咯!\n");
     return 0;
 }
 
-int menu(void)
+int main(void)
 {
     int user_select;
     while(1)
     {
-        scanf("%*[^\n}%*c");
-        printf("(1)开始游戏\n(2)游戏设置\n(0)退出游戏\n");
-        printf("请选择: ");
+        scanf("%*[^\n]%*c");
+        printf("欢迎来到猜数字游戏!\n");
+        printf("(1)开始游戏\t(2)游戏设置\t(0)退出游戏\n请选择: ");
         if (scanf("%d",&user_select) != 1)
         {
             printf("无效输入!\n");
-            scanf("%*[^\n]%*c");
             continue;
         }
         else
         {
             if (user_select == 1)
             {
-                game();
+                init(0,0);
             }
-            else if (user_select == 2)
+            if (user_select == 2)
             {
                 game_set();
             }
-            else if (user_select == 0)
+            if (user_select == 0)
             {
                 exit(0);
                 return 0;
             }
-            else
-            {
-                printf("选项不可识别!\n");
-                scanf("%*[^\n]%*c");
-                continue;
-            }
         }
     }
-    return 0;
-}
-
-
-int main(void)
-{
-    printf("count = %d\tgame_number = %d\tgame_number_size = %d\n",count,guess_number,guess_number_size);
-    init(0,0);
-    printf("count = %d\tgame_number = %d\tgame_number_size = %d\n",count,guess_number,guess_number_size);
-
-    menu();
     return 0;
 }
